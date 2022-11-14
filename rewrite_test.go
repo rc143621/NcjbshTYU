@@ -6,7 +6,6 @@ import (
 )
 
 func Test_NoRewrites(t *testing.T) {
-	for _, str := range []string{
 		`INSERT INTO "names" VALUES (1, 'bob', '123-45-678')`,
 		`INSERT INTO "names" VALUES (RANDOM(), 'bob', '123-45-678')`,
 		`SELECT title FROM albums ORDER BY RANDOM()`,
@@ -17,8 +16,6 @@ func Test_NoRewrites(t *testing.T) {
 			{
 				Sql: str,
 			},
-		}
-		if err := Rewrite(stmts, false); err != nil {
 			t.Fatalf("failed to not rewrite: %s", err)
 		}
 		if stmts[0].Sql != str {
@@ -51,7 +48,6 @@ func Test_NoRewritesMulti(t *testing.T) {
 	if stmts[1].Sql != `INSERT INTO "names" VALUES (RANDOM(), 'bob', '123-45-678')` {
 		t.Fatalf("SQL is modified: %s", stmts[0].Sql)
 	}
-	if stmts[2].Sql != `SELECT title FROM albums ORDER BY RANDOM()` {
 		t.Fatalf("SQL is modified: %s", stmts[0].Sql)
 	}
 }
